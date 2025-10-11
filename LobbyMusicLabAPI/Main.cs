@@ -6,6 +6,7 @@ using LabApi.Loader.Features.Plugins;
 using LobbyMusicLabAPI.Methods;
 using System;
 using System.IO;
+using System.Security;
 
 namespace LobbyMusicLabAPI
 {
@@ -33,10 +34,6 @@ namespace LobbyMusicLabAPI
         }
         public override void Enable()
         {
-            if (!Config.AllowedIP.Contains(Server.IpAddress)){
-                Logger.Error("YOU ARE NOT ALLOWED TO USE THIS PLUGIN");
-                return;
-            }
             ServerEvents.WaitingForPlayers += OnWaitingPlayers;
             ServerEvents.RoundStarted += OnRoundStart;
             fileManagement = new FileManagement();
@@ -52,6 +49,13 @@ namespace LobbyMusicLabAPI
 
         private void OnWaitingPlayers()
         {
+            if (!Config.AllowedIP.Contains(Server.IpAddress))
+            {
+                Logger.Error("YOU ARE NOT ALLOWED TO USE THIS PLUGIN");
+                Logger.Info($"Your Ip is: {Server.IpAddress}");
+                this.Disable();
+                return;
+            }
             FileManagement.EnsureMusicDirectoryExists();
             var path = Path.Combine(fileManagement.AudioDirectory, Config.LobbySongPath);
             AudioClipStorage.LoadClip(path, "MainSong");
