@@ -1,0 +1,7 @@
+.vs/
+*.dll
+/LobbyMusicLabAPI/obj/
+/LobbyMusicLabAPI/bin/
+/packages/
+.DS_Store
+/LobbyMusicLabAPI/Methods
