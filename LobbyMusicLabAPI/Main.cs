@@ -1,12 +1,14 @@
 ﻿using LabApi.Events.Handlers;
+using LabApi.Features;
 using LabApi.Features.Console;
 using LabApi.Features.Wrappers;
 using LabApi.Loader;
 using LabApi.Loader.Features.Plugins;
+using LobbyMusicLabAPI.Enums;
 using LobbyMusicLabAPI.Methods;
-using System;
+using MEC;
 using System.IO;
-using System.Security;
+using System.Reflection;
 
 namespace LobbyMusicLabAPI
 {
@@ -18,15 +20,18 @@ namespace LobbyMusicLabAPI
 
         public override string Author => "Hanbin-GW";
 
-        public override Version Version => new Version(0,1,0);
+        public override System.Version Version => Assembly.GetExecutingAssembly().GetName().Version;
         public FileManagement fileManagement;
-        public override Version RequiredApiVersion => throw new NotImplementedException();
+        public override System.Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
         public Config Config;
+        public static Main Instance { get; private set; }
+        public RunMode CurrentRunMode { get; private set; }
+
         public override void LoadConfigs()
         {
             base.LoadConfigs();
 
-            if (!this.TryLoadConfig<Config>("ClassicPlugin.yml", out Config))
+            if (!this.TryLoadConfig<Config>("MusicPlugin.yml", out Config))
             {
                 Logger.Error("설정 파일을 불러오지 못했습니다. 기본값을 사용합니다.");
                 Config = new Config();
@@ -34,6 +39,7 @@ namespace LobbyMusicLabAPI
         }
         public override void Enable()
         {
+            Instance = this;
             ServerEvents.WaitingForPlayers += OnWaitingPlayers;
             ServerEvents.RoundStarted += OnRoundStart;
             fileManagement = new FileManagement();
@@ -45,17 +51,33 @@ namespace LobbyMusicLabAPI
             ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
             ServerEvents.RoundStarted -= OnRoundStart;
             fileManagement = null;
+            Instance = null;
         }
 
         private void OnWaitingPlayers()
         {
-            if (!Config.AllowedIP.Contains(Server.IpAddress))
+            //if (!Config.AllowedIP.Contains(Server.IpAddress))
+            //{
+            //    Logger.Error("YOU ARE NOT ALLOWED TO USE THIS PLUGIN");
+            //    Logger.Info($"Your Ip is: {Server.IpAddress}");
+            //    this.Disable();
+            //    return;
+            //}
+            Logger.Info($"Your IP is: {Server.IpAddress}");
+
+            // 블랙리스트 서버는 셧다운
+            if (Config.BlackListedIP.Contains(Server.IpAddress))
             {
-                Logger.Error("YOU ARE NOT ALLOWED TO USE THIS PLUGIN");
-                Logger.Info($"Your Ip is: {Server.IpAddress}");
-                this.Disable();
+                Logger.Error("BLACKLISTED SERVER. Shutting down in 10 seconds...");
+                Timing.CallDelayed(10, Server.Shutdown);
                 return;
             }
+
+            // 허용된 IP면 Full로 승격
+            UpgradeToFullIfAllowed();
+
+            if (!Config.AllowedIP.Contains(Server.IpAddress))
+                Logger.Warn("NOT ALLOWED IP → Running Free Edition (Limited) mode.");
             FileManagement.EnsureMusicDirectoryExists();
             var path = Path.Combine(fileManagement.AudioDirectory, Config.LobbySongPath);
             AudioClipStorage.LoadClip(path, "MainSong");
@@ -75,6 +97,11 @@ namespace LobbyMusicLabAPI
 
             // Removes all playing clips.
             lobbyPlayer.RemoveAllClips();
+        }
+
+        private void UpgradeToFullIfAllowed()
+        {
+            Logger.Warn("[Attention] The Premium features are working in progress...");
         }
     }
 }
