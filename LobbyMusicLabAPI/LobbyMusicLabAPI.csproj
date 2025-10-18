@@ -91,8 +91,10 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Enums\AccessMode.cs" />
+    <Compile Include="Handlers\PaidFeatures.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Methods\FileManagement.cs" />
+    <Compile Include="Methods\MusicMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
+    <Folder Include="SSSS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
