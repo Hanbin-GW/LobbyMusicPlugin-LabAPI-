@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LobbyMusicLabAPI</RootNamespace>
     <AssemblyName>LobbyMusicLabAPI</AssemblyName>
-    <LangVersion>9.0</LangVersion>  
+    <LangVersion>9.0</LangVersion>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Enums\AccessMode.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Methods\FileManagement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
