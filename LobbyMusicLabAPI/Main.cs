@@ -5,10 +5,15 @@ using LabApi.Features.Wrappers;
 using LabApi.Loader;
 using LabApi.Loader.Features.Plugins;
 using LobbyMusicLabAPI.Enums;
+using LobbyMusicLabAPI.EventHandlers;
 using LobbyMusicLabAPI.Methods;
+using LobbyMusicLabAPI.SSSS;
 using MEC;
+using ProjectMER.Features.Objects;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using UserSettings.ServerSpecific;
 
 namespace LobbyMusicLabAPI
 {
@@ -26,6 +31,10 @@ namespace LobbyMusicLabAPI
         public Config Config;
         public static Main Instance { get; private set; }
         public RunMode CurrentRunMode { get; private set; }
+        public Dictionary<int, bool> musicDisabledPlayers = new();
+        public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
+
+        public SsssEventHandler ssssEventHandler = null;
 
         public override void LoadConfigs()
         {
@@ -43,13 +52,21 @@ namespace LobbyMusicLabAPI
             ServerEvents.WaitingForPlayers += OnWaitingPlayers;
             ServerEvents.RoundStarted += OnRoundStart;
             fileManagement = new FileManagement();
+
+            ssssEventHandler = new SsssEventHandler();
+            PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
+
             Logger.Info("WELCOME TO THE GHOST PLUGIN'S SERVICE!");
         }
 
         public override void Disable()
         {
+            PlayerEvents.Joined -= ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ssssEventHandler.OnSettingValueReceived;
             ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
             ServerEvents.RoundStarted -= OnRoundStart;
+            ssssEventHandler = null;
             fileManagement = null;
             Instance = null;
         }

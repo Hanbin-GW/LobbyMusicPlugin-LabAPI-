@@ -10,6 +10,8 @@ namespace LobbyMusicLabAPI
         public string LobbySongPath { get; set; } = "77.ogg";
         public float Volume { get; set; } = 0.9f;
         public bool Loop { get; set; } = true;
+        public int MusicToggleId { get; set; } = 20001;
+
 
         [YamlIgnore]
         public List<string> AllowedIP { get; set; } = new List<string>()
