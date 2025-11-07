@@ -8,7 +8,7 @@ using LobbyMusicLabAPI.Enums;
 using LobbyMusicLabAPI.EventHandlers;
 using LobbyMusicLabAPI.Methods;
 using MEC;
-using ProjectMER.Features.Objects;
+//using ProjectMER.Features.Objects;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -31,7 +31,7 @@ namespace LobbyMusicLabAPI
         public static Main Instance { get; private set; }
         public RunMode CurrentRunMode { get; private set; }
         public Dictionary<int, bool> musicDisabledPlayers = new();
-        public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
+        //public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
 
         public SsssEventHandler ssssEventHandler = null;
         public MusicEventHandler musicEventHandler = null;

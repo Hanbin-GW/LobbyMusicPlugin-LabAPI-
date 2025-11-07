@@ -14,7 +14,7 @@ namespace LobbyMusicLabAPI.API
         {
             if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("오디오 파일을 찾을 수 없습니다.", filePath);
+                throw new FileNotFoundException("CANNOT FIND AUDIO FILE.", filePath);
             }
 
             using (var stream = File.OpenRead(filePath))

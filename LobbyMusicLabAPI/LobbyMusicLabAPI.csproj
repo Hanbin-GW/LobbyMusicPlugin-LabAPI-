@@ -51,9 +51,6 @@
     <Reference Include="NVorbis">
       <HintPath>..\..\..\..\Documents\dependencies\NVorbis.dll</HintPath>
     </Reference>
-    <Reference Include="ProjectMER">
-      <HintPath>Z:\Dll\else\ProjectMER.dll</HintPath>
-    </Reference>
     <Reference Include="SharpCompress">
       <HintPath>..\..\..\..\Documents\dependencies\SharpCompress.dll</HintPath>
     </Reference>
@@ -93,8 +90,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\AudioUtils.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Enums\AccessMode.cs" />
+    <Compile Include="EventHandlers\MusicEventHandler.cs" />
     <Compile Include="EventHandlers\SsssEventHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Methods\FileManagement.cs" />
