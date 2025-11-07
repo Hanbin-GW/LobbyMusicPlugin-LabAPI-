@@ -7,7 +7,6 @@ using LabApi.Loader.Features.Plugins;
 using LobbyMusicLabAPI.Enums;
 using LobbyMusicLabAPI.EventHandlers;
 using LobbyMusicLabAPI.Methods;
-using LobbyMusicLabAPI.SSSS;
 using MEC;
 using ProjectMER.Features.Objects;
 using System.Collections.Generic;
@@ -35,6 +34,7 @@ namespace LobbyMusicLabAPI
         public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
 
         public SsssEventHandler ssssEventHandler = null;
+        public MusicEventHandler musicEventHandler = null;
 
         public override void LoadConfigs()
         {
@@ -52,7 +52,7 @@ namespace LobbyMusicLabAPI
             ServerEvents.WaitingForPlayers += OnWaitingPlayers;
             ServerEvents.RoundStarted += OnRoundStart;
             fileManagement = new FileManagement();
-
+            musicEventHandler = new MusicEventHandler();
             ssssEventHandler = new SsssEventHandler();
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
@@ -91,7 +91,12 @@ namespace LobbyMusicLabAPI
             }
 
             // 허용된 IP면 Full로 승격
-            UpgradeToFullIfAllowed();
+            if (Config.AllowedIP.Contains(Server.IpAddress))
+            {
+                UpgradeToFullIfAllowed();
+                Round.Restart();
+                Logger.Raw("[Info] [LobbyMusic] your IP is verified apply the features", System.ConsoleColor.Green);
+            }
 
             if (!Config.AllowedIP.Contains(Server.IpAddress))
                 Logger.Warn("NOT ALLOWED IP → Running Free Edition (Limited) mode.");
@@ -118,6 +123,14 @@ namespace LobbyMusicLabAPI
 
         private void UpgradeToFullIfAllowed()
         {
+            ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
+            ServerEvents.RoundStarted += OnRoundStart;
+            fileManagement = new FileManagement();
+            musicEventHandler = new MusicEventHandler();
+            ssssEventHandler = new SsssEventHandler();
+            ServerEvents.WaitingForPlayers += musicEventHandler.OnWaitingPlayers;
+            PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
             Logger.Warn("[Attention] The Premium features are working in progress...");
         }
     }

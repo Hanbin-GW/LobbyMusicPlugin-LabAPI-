@@ -26,5 +26,12 @@ namespace LobbyMusicLabAPI
             "222.234.132.34",
             "95.214.179.25",
         };
+
+        public string[] MusicPlayList { get; set; } = new[]
+        {
+            "77part2ost.ogg",
+            "Slow_Light.ogg",
+            "77.ogg"
+        };
     }
 }

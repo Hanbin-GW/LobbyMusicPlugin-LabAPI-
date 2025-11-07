@@ -11,3 +11,4 @@
 /packages/
 .DS_Store
 /LobbyMusicLabAPI/Methods/
+/LobbyMusicLabAPI/EventHandlers/MusicEventHandler.cs
