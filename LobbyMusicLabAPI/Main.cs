@@ -42,7 +42,7 @@ namespace LobbyMusicLabAPI
 
             if (!this.TryLoadConfig<Config>("MusicPlugin.yml", out Config))
             {
-                Logger.Error("설정 파일을 불러오지 못했습니다. 기본값을 사용합니다.");
+                Logger.Error("Cannot Create ConfigFile...Create a default one.");
                 Config = new Config();
             }
         }

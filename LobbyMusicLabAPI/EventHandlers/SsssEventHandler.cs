@@ -48,12 +48,12 @@ namespace LobbyMusicLabAPI.EventHandlers
                 if (musicSetting.SyncIsA)
                 {
                     Main.Instance.musicDisabledPlayers[playerkey] = false;
-                    player.SendHint("<color=green>🎵 음악 듣기 설정됨</color>", 2f);
+                    player.SendHint("<color=green>🎵 Turn <b>on</b> the music</color>", 2f);
                 }
                 else if (musicSetting.SyncIsB)
                 {
                     Main.Instance.musicDisabledPlayers[playerkey] = true;
-                    player.SendHint("<color=red>🔇 음악 끄기 설정됨</color>", 2f);
+                    player.SendHint("<color=red>🔇 Turn <b>off</b> the music</color>", 2f);
                 }
                 return;
             }
