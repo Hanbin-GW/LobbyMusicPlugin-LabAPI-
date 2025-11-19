@@ -56,7 +56,7 @@ namespace LobbyMusicLabAPI
             ssssEventHandler = new SsssEventHandler();
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
-
+            MusicMethods.EnsureMusicDirectoryExists();
             Logger.Info("WELCOME TO THE GHOST PLUGIN'S SERVICE!");
         }
 
