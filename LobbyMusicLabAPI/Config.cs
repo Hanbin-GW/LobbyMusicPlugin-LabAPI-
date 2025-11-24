@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using YamlDotNet.Serialization;
 
 namespace LobbyMusicLabAPI
@@ -12,6 +13,13 @@ namespace LobbyMusicLabAPI
         public bool Loop { get; set; } = true;
         public int MusicToggleId { get; set; } = 20001;
 
+        [Description("MTF Respawn BGM (Premeum Feature)")]
+        public string MtfRespawnMusicPath { get; set; } = "NtfRespawn.ogg";
+
+        [Description("CI Respawn BGM (Premeum Feature)")]
+        public string CiRespawnMusicPath { get; set; } = "NtfRespawn.ogg";
+        [Description("Special Events Music Play Duration (Premeum Feature)")]
+        public float MusicPlayDuration { get; set; } = 15f;
 
         [YamlIgnore]
         public List<string> AllowedIP { get; set; } = new List<string>()

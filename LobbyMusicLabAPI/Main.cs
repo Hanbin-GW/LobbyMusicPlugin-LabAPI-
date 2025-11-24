@@ -35,6 +35,7 @@ namespace LobbyMusicLabAPI
 
         public SsssEventHandler ssssEventHandler = null;
         public MusicEventHandler musicEventHandler = null;
+        public PaidFeatures paidFeatures = null;
 
         public override void LoadConfigs()
         {
@@ -66,6 +67,9 @@ namespace LobbyMusicLabAPI
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ssssEventHandler.OnSettingValueReceived;
             ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
             ServerEvents.RoundStarted -= OnRoundStart;
+            ServerEvents.WaitingForPlayers -= musicEventHandler.OnWaitingPlayers;
+            ServerEvents.WaveRespawning -= paidFeatures.OnRespawningTeam;
+            paidFeatures = null;
             ssssEventHandler = null;
             fileManagement = null;
             Instance = null;
@@ -128,8 +132,10 @@ namespace LobbyMusicLabAPI
             fileManagement = new FileManagement();
             musicEventHandler = new MusicEventHandler();
             ssssEventHandler = new SsssEventHandler();
+            paidFeatures = new PaidFeatures();
             ServerEvents.WaitingForPlayers += musicEventHandler.OnWaitingPlayers;
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+            ServerEvents.WaveRespawning += paidFeatures.OnRespawningTeam;
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
             Logger.Warn("[Attention] The Premium features are working in progress...");
         }

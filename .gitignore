@@ -12,3 +12,4 @@
 .DS_Store
 /LobbyMusicLabAPI/Methods/
 /LobbyMusicLabAPI/EventHandlers/MusicEventHandler.cs
+/LobbyMusicLabAPI/EventHandlers/PaidFeatures.cs

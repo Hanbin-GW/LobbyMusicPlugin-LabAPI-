@@ -94,6 +94,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Enums\AccessMode.cs" />
     <Compile Include="EventHandlers\MusicEventHandler.cs" />
+    <Compile Include="EventHandlers\PaidFeatures.cs" />
     <Compile Include="EventHandlers\SsssEventHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Methods\FileManagement.cs" />
