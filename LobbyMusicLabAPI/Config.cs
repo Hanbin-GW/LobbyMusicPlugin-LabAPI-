@@ -19,7 +19,7 @@ namespace LobbyMusicLabAPI
         [Description("CI Respawn BGM (Premeum Feature)")]
         public string CiRespawnMusicPath { get; set; } = "NtfRespawn.ogg";
         [Description("Special Events Music Play Duration (Premeum Feature)")]
-        public float MusicPlayDuration { get; set; } = 15f;
+        public int MusicPlayDuration { get; set; } = 30;
 
         [YamlIgnore]
         public List<string> AllowedIP { get; set; } = new List<string>()

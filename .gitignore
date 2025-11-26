@@ -13,3 +13,4 @@
 /LobbyMusicLabAPI/Methods/
 /LobbyMusicLabAPI/EventHandlers/MusicEventHandler.cs
 /LobbyMusicLabAPI/EventHandlers/PaidFeatures.cs
+/LobbyMusicLabAPI/EventHandlers/KillSoundEffects.cs
