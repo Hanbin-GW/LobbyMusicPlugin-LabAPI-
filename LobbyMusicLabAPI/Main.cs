@@ -36,6 +36,7 @@ namespace LobbyMusicLabAPI
         public SsssEventHandler ssssEventHandler = null;
         public MusicEventHandler musicEventHandler = null;
         public PaidFeatures paidFeatures = null;
+        public KillSoundEffects killSoundEffects = null;
 
         public override void LoadConfigs()
         {
@@ -55,6 +56,7 @@ namespace LobbyMusicLabAPI
             fileManagement = new FileManagement();
             musicEventHandler = new MusicEventHandler();
             ssssEventHandler = new SsssEventHandler();
+            killSoundEffects = new KillSoundEffects();
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
             MusicMethods.EnsureMusicDirectoryExists();
@@ -69,9 +71,14 @@ namespace LobbyMusicLabAPI
             ServerEvents.RoundStarted -= OnRoundStart;
             ServerEvents.WaitingForPlayers -= musicEventHandler.OnWaitingPlayers;
             ServerEvents.WaveRespawning -= paidFeatures.OnRespawningTeam;
+            ServerEvents.RoundStarting -= killSoundEffects.OnRoundStarting;
+            ServerEvents.RoundEnded -= killSoundEffects.OnRoundEnded;
+            ObjectiveEvents.KilledEnemyCompleted -= killSoundEffects.OnEnemyKilledObjective;
+
             paidFeatures = null;
             ssssEventHandler = null;
             fileManagement = null;
+            killSoundEffects = null;
             Instance = null;
         }
 
@@ -127,12 +134,17 @@ namespace LobbyMusicLabAPI
 
         private void UpgradeToFullIfAllowed()
         {
-            ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
-            ServerEvents.RoundStarted += OnRoundStart;
+            
             fileManagement = new FileManagement();
             musicEventHandler = new MusicEventHandler();
             ssssEventHandler = new SsssEventHandler();
             paidFeatures = new PaidFeatures();
+            killSoundEffects = new KillSoundEffects();
+
+            ServerEvents.RoundStarting += killSoundEffects.OnRoundStarting;
+            ServerEvents.RoundEnded += killSoundEffects.OnRoundEnded;
+            ObjectiveEvents.KilledEnemyCompleted += killSoundEffects.OnEnemyKilledObjective;
+
             ServerEvents.WaitingForPlayers += musicEventHandler.OnWaitingPlayers;
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
             ServerEvents.WaveRespawning += paidFeatures.OnRespawningTeam;

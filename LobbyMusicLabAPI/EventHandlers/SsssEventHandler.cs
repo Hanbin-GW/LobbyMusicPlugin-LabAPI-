@@ -13,7 +13,8 @@ namespace LobbyMusicLabAPI.EventHandlers
         {
             if (Main.Instance.ssssEventHandler == null)
                 return;
-            if (!Round.IsRoundStarted)
+            //if (!Round.IsRoundStarted)
+            if (true)
             {
                 try
                 {
@@ -22,7 +23,7 @@ namespace LobbyMusicLabAPI.EventHandlers
                 }
                 catch (InvalidCastException ex)
                 {
-                    Logger.Error($"VVUP: InvalidCastException occurred: {ex.Message}");
+                    Logger.Error($"Error: InvalidCastException occurred: {ex.Message}");
                 }
             }
         }
