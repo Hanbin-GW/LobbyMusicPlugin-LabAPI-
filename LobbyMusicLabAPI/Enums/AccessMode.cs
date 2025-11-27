@@ -16,7 +16,7 @@ namespace LobbyMusicLabAPI.Enums
     }
     public static class AccessMode
     {
-         public static RunMode Resolve()
+        public static RunMode Resolve()
         {
             var ip = Server.IpAddress;
             var cfg = Main.Instance.Config;
