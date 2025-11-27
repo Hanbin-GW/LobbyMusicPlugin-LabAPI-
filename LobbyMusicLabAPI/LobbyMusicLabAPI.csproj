@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Addons\IPremiumAddon.cs" />
     <Compile Include="API\AudioUtils.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Enums\AccessMode.cs" />

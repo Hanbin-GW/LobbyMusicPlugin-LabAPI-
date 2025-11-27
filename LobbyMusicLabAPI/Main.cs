@@ -104,6 +104,7 @@ namespace LobbyMusicLabAPI
             // 허용된 IP면 Full로 승격
             if (Config.AllowedIP.Contains(Server.IpAddress))
             {
+                Logger.Raw("[Notice] NW wants to make 'open-source', So next update, private events handlers will be remove.", System.ConsoleColor.DarkRed);
                 UpgradeToFullIfAllowed();
                 Round.Restart();
                 Logger.Raw("[Info] [LobbyMusic] your IP is verified apply the features", System.ConsoleColor.Green);
