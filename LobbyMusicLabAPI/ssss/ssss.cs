@@ -9,14 +9,14 @@ public class ssss
     {
         List<ServerSpecificSettingBase> settings = new List<ServerSpecificSettingBase>();
 
-        settings.Add(new SSGroupHeader("🎵 음악 재생 설정"));
+        settings.Add(new SSGroupHeader("🎵 Music playback settings"));
         settings.Add(new SSTwoButtonsSetting(
             Main.Instance.Config.MusicToggleId,
-            "로비 및 이벤트 음악 설정",
-            "듣기",
-            "끄기",
+            "Lobby Music Settings",
+            "On",
+            "Off",
             false,
-            "음악 재생 여부를 설정합니다."
+            "Set whether to play music."
         ));
 
         return settings.ToArray();
