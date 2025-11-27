@@ -47,9 +47,9 @@ namespace LobbyMusicLabAPI
         {
             try
             {
-                // 이 플러그인 DLL이 있는 폴더 경로
+                // Folder path with this plug-in DLL
                 string pluginDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string premiumPath = Path.Combine(pluginDir, "LobbyMusicPremium.dll"); // 프리미엄 DLL 이름
+                string premiumPath = Path.Combine(pluginDir, "LobbyMusic-Premium-Addon.dll"); // DLL name
 
                 if (!File.Exists(premiumPath))
                 {
@@ -59,7 +59,7 @@ namespace LobbyMusicLabAPI
 
                 var asm = Assembly.LoadFrom(premiumPath);
 
-                // IPremiumAddon 구현한 타입 하나 찾기
+                // Find one type of IPremiumAddon implementation
                 var addonType = asm.GetTypes()
                     .FirstOrDefault(t =>
                         typeof(IPremiumAddon).IsAssignableFrom(t) &&
@@ -150,6 +150,7 @@ namespace LobbyMusicLabAPI
             ServerEvents.WaitingForPlayers += OnWaitingPlayers;
             ServerEvents.RoundStarted += OnRoundStart;
             PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
         }
 
         // ★ Disable()에 있던 해제 코드도 여기로.
@@ -158,6 +159,7 @@ namespace LobbyMusicLabAPI
             ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
             ServerEvents.RoundStarted -= OnRoundStart;
             PlayerEvents.Joined -= ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ssssEventHandler.OnSettingValueReceived;
         }
 
         private void OnWaitingPlayers()
