@@ -13,8 +13,7 @@ namespace LobbyMusicLabAPI.EventHandlers
         {
             if (Main.Instance.ssssEventHandler == null)
                 return;
-            //if (!Round.IsRoundStarted)
-            if (true)
+            if (!Round.IsRoundStarted)
             {
                 try
                 {

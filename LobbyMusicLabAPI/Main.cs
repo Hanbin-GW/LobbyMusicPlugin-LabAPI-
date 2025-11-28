@@ -11,7 +11,6 @@ using LobbyMusicLabAPI.Methods;
 using MEC;
 using System;
 
-//using ProjectMER.Features.Objects;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,9 +37,9 @@ namespace LobbyMusicLabAPI
         //public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
 
         public SsssEventHandler ssssEventHandler = null;
-        //public MusicEventHandler musicEventHandler = null;
-        //public PaidFeatures paidFeatures = null;
-        //public KillSoundEffects killSoundEffects = null;
+        public MusicEventHandler musicEventHandler = null;
+        public PaidFeatures paidFeatures = null;
+        public KillSoundEffects killSoundEffects = null;
 
         private IPremiumAddon _premiumAddon;
         private void TryLoadPremiumAddon()
@@ -48,12 +47,15 @@ namespace LobbyMusicLabAPI
             try
             {
                 // Folder path with this plug-in DLL
-                string pluginDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                // string pluginDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                string pluginDir = Path.GetDirectoryName(FilePath);
+
                 string premiumPath = Path.Combine(pluginDir, "LobbyMusic-Premium-Addon.dll"); // DLL name
 
                 if (!File.Exists(premiumPath))
                 {
-                    Console.WriteLine("[LobbyMusic] Premium DLL not found, running free version.");
+                    Logger.Warn("[LobbyMusic] Premium DLL not found, running free version.");
                     return;
                 }
 
@@ -68,18 +70,18 @@ namespace LobbyMusicLabAPI
 
                 if (addonType == null)
                 {
-                    Console.WriteLine("[LobbyMusic] Premium DLL found, but no IPremiumAddon implementation.");
+                    Logger.Warn("[LobbyMusic] Premium DLL found, but no IPremiumAddon implementation.");
                     return;
                 }
 
                 _premiumAddon = (IPremiumAddon)Activator.CreateInstance(addonType);
                 _premiumAddon.Register();
 
-                Console.WriteLine("[LobbyMusic] Premium addon loaded successfully.");
+                Logger.Info("[LobbyMusic] Premium addon loaded successfully.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[LobbyMusic] Failed to load premium addon: " + ex);
+                Logger.Error("[LobbyMusic] Failed to load premium addon: " + ex);
                 _premiumAddon = null;
             }
         }
@@ -97,20 +99,35 @@ namespace LobbyMusicLabAPI
         public override void Enable()
         {
             Instance = this;
-            
 
-            RegisterCoreEvents();
+            fileManagement = new FileManagement();
+            musicEventHandler = new MusicEventHandler();
+            ssssEventHandler = new SsssEventHandler();
+            killSoundEffects = new KillSoundEffects();
+            //ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
+            MusicMethods.EnsureMusicDirectoryExists();
+
 
             TryLoadPremiumAddon();
 
-
-            //fileManagement = new FileManagement();
-            //musicEventHandler = new MusicEventHandler();
-            ssssEventHandler = new SsssEventHandler();
-            //killSoundEffects = new KillSoundEffects();
-            //ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
-            MusicMethods.EnsureMusicDirectoryExists();
+            if (_premiumAddon != null)
+            {
+                ServerEvents.RoundStarted += OnRoundStart;
+                PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+                ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
+                Logger.Info("Premium addon active → Free version event disabled.");
+            }
+            else
+            {
+                Logger.Warn("Premium addon missing → Running Free Edition.");
+                //RegisterCoreEvents(); 
+                ServerEvents.WaitingForPlayers += OnWaitingPlayers;
+                ServerEvents.RoundStarted += OnRoundStart;
+                PlayerEvents.Joined += ssssEventHandler.OnPlayerJoined;
+                ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
+            }
             Logger.Info("WELCOME TO THE GHOST PLUGIN'S SERVICE!");
+            //Logger.Info(Path.GetDirectoryName(FilePath));
         }
 
         public override void Disable()
@@ -125,23 +142,28 @@ namespace LobbyMusicLabAPI
             //ServerEvents.RoundEnded -= killSoundEffects.OnRoundEnded;
             //ObjectiveEvents.KilledEnemyCompleted -= killSoundEffects.OnEnemyKilledObjective;
 
-            //paidFeatures = null;
-            //fileManagement = null;
-            //killSoundEffects = null;
+            
 
             if (_premiumAddon != null)
             {
                 try { _premiumAddon.Unregister(); }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("[LobbyMusic] Premium Unregister error: " + ex);
+                    Logger.Error("[LobbyMusic] Premium Unregister error: " + ex);
                 }
 
                 _premiumAddon = null;
             }
 
-            UnregisterCoreEvents();
+            // UnregisterCoreEvents();
+            ServerEvents.WaitingForPlayers -= OnWaitingPlayers;
+            ServerEvents.RoundStarted -= OnRoundStart;
+            PlayerEvents.Joined -= ssssEventHandler.OnPlayerJoined;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= ssssEventHandler.OnSettingValueReceived;
             ssssEventHandler = null;
+            paidFeatures = null;
+            fileManagement = null;
+            killSoundEffects = null;
             Instance = null;
         }
 

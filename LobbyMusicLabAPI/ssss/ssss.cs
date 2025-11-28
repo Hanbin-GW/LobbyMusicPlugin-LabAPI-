@@ -11,12 +11,14 @@ public class ssss
 
         settings.Add(new SSGroupHeader("🎵 Music playback settings"));
         settings.Add(new SSTwoButtonsSetting(
-            Main.Instance.Config.MusicToggleId,
-            "Lobby Music Settings",
-            "On",
-            "Off",
-            false,
-            "Set whether to play music."
+            id: Main.Instance.Config.MusicToggleId,
+            label: "Lobby Music Settings",
+            optionA: "On",
+            optionB: "Off",
+            defaultIsB: false,
+            hint: "Set whether to play music.",
+            collectionId: byte.MaxValue,
+            isServerOnly: true
         ));
 
         return settings.ToArray();
