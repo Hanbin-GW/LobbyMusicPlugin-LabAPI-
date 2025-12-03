@@ -5,7 +5,7 @@ using LabApi.Features.Wrappers;
 using LabApi.Loader;
 using LabApi.Loader.Features.Plugins;
 using LobbyMusicLabAPI.Addons;
-using LobbyMusicLabAPI.Enums;
+//using LobbyMusicLabAPI.Enums;
 using LobbyMusicLabAPI.EventHandlers;
 using LobbyMusicLabAPI.Methods;
 using MEC;
@@ -32,14 +32,14 @@ namespace LobbyMusicLabAPI
         public override System.Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
         public Config Config;
         public static Main Instance { get; private set; }
-        public RunMode CurrentRunMode { get; private set; }
+        //public RunMode CurrentRunMode { get; private set; }
         public Dictionary<int, bool> musicDisabledPlayers = new();
         //public Dictionary<int, SchematicObject> Speakers { get; private set; } = new();
 
         public SsssEventHandler ssssEventHandler = null;
         public MusicEventHandler musicEventHandler = null;
         public PaidFeatures paidFeatures = null;
-        public KillSoundEffects killSoundEffects = null;
+        //public KillSoundEffects killSoundEffects = null;
 
         private IPremiumAddon _premiumAddon;
         private void TryLoadPremiumAddon()
@@ -103,7 +103,7 @@ namespace LobbyMusicLabAPI
             fileManagement = new FileManagement();
             musicEventHandler = new MusicEventHandler();
             ssssEventHandler = new SsssEventHandler();
-            killSoundEffects = new KillSoundEffects();
+            //killSoundEffects = new KillSoundEffects();
             //ServerSpecificSettingsSync.ServerOnSettingValueReceived += ssssEventHandler.OnSettingValueReceived;
             MusicMethods.EnsureMusicDirectoryExists();
 
@@ -163,7 +163,7 @@ namespace LobbyMusicLabAPI
             ssssEventHandler = null;
             paidFeatures = null;
             fileManagement = null;
-            killSoundEffects = null;
+            //killSoundEffects = null;
             Instance = null;
         }
 
