@@ -1,27 +1,26 @@
 ﻿using System.Collections.Generic;
 using UserSettings.ServerSpecific;
 
-namespace LobbyMusicLabAPI.SSSS;
-
-public class ssss
+namespace LobbyMusicLabAPI.SSSS
 {
-    public static ServerSpecificSettingBase[] GetMinimalMusicSetting()
+    public class ssss
     {
-        List<ServerSpecificSettingBase> settings = new List<ServerSpecificSettingBase>();
+        public static ServerSpecificSettingBase[] GetMinimalMusicSetting()
+        {
+            List<ServerSpecificSettingBase> settings = new List<ServerSpecificSettingBase>();
 
-        settings.Add(new SSGroupHeader("🎵 Music playback settings"));
-        settings.Add(new SSTwoButtonsSetting(
-            id: Main.Instance.Config.MusicToggleId,
-            label: "Lobby Music Settings",
-            optionA: "On",
-            optionB: "Off",
-            defaultIsB: false,
-            hint: "Set whether to play music.",
-            collectionId: byte.MaxValue,
-            isServerOnly: true
-        ));
+            settings.Add(new SSGroupHeader("🎵 Music playback settings"));
+            settings.Add(new SSTwoButtonsSetting(
+                id: Main.Instance.Config.MusicToggleId,
+                label: "Lobby Music Settings",
+                optionA: "On",
+                optionB: "Off",
+                defaultIsB: false,
+                hint: "Set whether to play music."
+            ));
 
-        return settings.ToArray();
+            return settings.ToArray();
+        }
+
     }
-
 }
